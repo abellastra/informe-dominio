@@ -1,23 +1,24 @@
-import express from'express'
-import cors from'cors'
-import dotenv from 'dotenv'
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import solicitudRoutes from "./routes/solicitudRoutes.js";
+dotenv.config();
 
-dotenv.config()
+const app = express();
 
-const app = express()
+const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 3000
+//middlewares
+app.use(cors());
+app.use(express.json());
 
-//middlewares 
-app.use(cors())
-app.use(express.json())
+app.use("/api", solicitudRoutes);
 
-// ruta d eprueba 
+// ruta d eprueba
 
-app.get ('/', (req,res)=>{
-    res.json({mensaje: "servidor funcionando :)"})
-
-})
-app.listen(PORT,()=>{
-    console.log(`SERVIDOR FUNCIONADO EN EL PUERTO ${PORT}`)
-})
+app.get("/", (req, res) => {
+  res.json({ mensaje: "servidor funcionando :)" });
+});
+app.listen(PORT, () => {
+  console.log(`SERVIDOR FUNCIONADO EN EL PUERTO ${PORT}`);
+});
