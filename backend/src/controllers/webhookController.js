@@ -1,6 +1,7 @@
 import prisma from'../db.js'
 
 import { MercadoPagoConfig, Payment } from 'mercadopago'
+import { enviarAvisoGestora, enviarConfirmacionCliente } from '../services/emaillService.js'
 
 const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN
@@ -20,13 +21,18 @@ export  const  recibirWebhook=async (req,res)=>{
     const solicitudId = Number(pagoInfo.external_reference)
     const estado = pagoInfo.status // "approved", "rejected", "pending"
 
-    await prisma.solicitud.update({
+   const solicitud = await prisma.solicitud.update({
         where:{id:solicitudId},
         data:{
          pagoEstado:estado,
          estado:estado==='approved' ? 'en_proceso' : 'pendiente'
         }
     })
+
+    if(estado === "approved"){
+        await enviarConfirmacionCliente(solicitud)
+        await enviarAvisoGestora(solicitud)
+    }
 
 res.sendStatus(200)
     } catch (error) {
