@@ -1,4 +1,5 @@
 import prisma from "../db.js";
+import { crearPreferencia } from "../services/mercadopagoService.js";
 
 export const crearSolicitud = async (req, res) => {
   try {
@@ -70,5 +71,32 @@ export const actualizarEstado= async(req,res)=>{
    res.json(solicitud)
   } catch (error) {
     res.status(500).json({error:"error al actulizar el estado "})
+  }
+}
+
+export const iniciarPago = async(req,res)=>{
+  try {
+    const {id}= req.params
+
+    const solicitud = await prisma.solicitud.findUnique({
+      where:{id:Number(id)}
+    })
+
+    if(!solicitud){
+      return res.status(404).json({error:'solicitud no encontrada '})
+    }
+     
+      const preferencia = await crearPreferencia(solicitud)
+
+    await prisma.solicitud.update({
+      where: { id: Number(id) },
+      data: { pagoId: preferencia.id }
+    })
+
+    res.json({ url: preferencia.sandbox_init_point })
+    
+  } catch (error) {
+    console.error('error:',error)
+    res.status(500).json({error:'ERROR al iniciar pago'})
   }
 }
