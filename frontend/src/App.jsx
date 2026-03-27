@@ -3,6 +3,7 @@ import Formulario from '../pages/Formulario'
 import Confirmacion from '../pages/Confirmacion'
 import Login from '../pages/admin/Login'
 import Solicitudes from '../pages/admin/Solicitudes'
+import DetalleSolicitud from '../pages/admin/DetailleSolicitud'
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Route path="/confirmacion" element={<Confirmacion />} />      
           <Route path="/admin" element={<Login/>} />
                   <Route path="/admin/solicitudes" element={<Solicitudes />} />
+                          <Route path="/admin/solicitudes/:id" element={<DetalleSolicitud />} />
       </Routes>
     </BrowserRouter>
   )
