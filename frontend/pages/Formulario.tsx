@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 const inputClass =
   "w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-md text-sm text-slate-900 bg-white outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-100 placeholder:text-slate-400 appearance-none";
@@ -17,18 +18,21 @@ interface Datos {
 }
 
 const Formulario = () => {
+
+const [searchParams] = useSearchParams();
+const tipoInicial = searchParams.get("tipo") || "";
   const [paso, setPaso] = useState(1);
-  const [datos, setDatos] = useState<Datos>({
-    nombre: "",
-    apellido: "",
-    cuil: "",
-    telefono: "",
-    mailCliente: "",
-    patente: "",
-    marcaModelo: "",
-    tipoVehiculo: "",
-    tipoInforme: "",
-  });
+const [datos, setDatos] = useState<Datos>({
+  nombre: "",
+  apellido: "",
+  cuil: "",
+  telefono: "",
+  mailCliente: "",
+  patente: "",
+  marcaModelo: "",
+  tipoVehiculo: "",
+  tipoInforme: tipoInicial,  
+});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (
