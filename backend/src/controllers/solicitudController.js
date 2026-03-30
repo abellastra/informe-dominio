@@ -3,24 +3,31 @@ import { crearPreferencia } from "../services/mercadopagoService.js";
 
 export const crearSolicitud = async (req, res) => {
   try {
-    const { mailCliente, patente, tipoVehiculo } = req.body;
-    if (!mailCliente || !patente || !tipoVehiculo) {
-      return res
-        .status(400)
-        .json({ error: "todos los camopos son obligatorios " });
+    const { nombre, apellido, cuil, telefono, mailCliente, patente, marcaModelo, tipoVehiculo, tipoInforme } = req.body
+
+    if (!nombre || !apellido || !cuil || !telefono || !mailCliente || !patente || !marcaModelo || !tipoVehiculo || !tipoInforme) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' })
     }
 
     const solicitud = await prisma.solicitud.create({
       data: {
+        nombre,
+        apellido,
+        cuil,
+        telefono,
         mailCliente,
         patente,
+        marcaModelo,
         tipoVehiculo,
-      },
-    });
-    res.status(201).json(solicitud);
+        tipoInforme
+      }
+    })
+
+    res.status(201).json(solicitud)
   } catch (error) {
-    res.status(500).json({ error: "ERROR al crear solicitud" })
-  };
+    console.log("error completo", error)
+    res.status(500).json({ error: 'Error al crear la solicitud' })
+  }
 }
 //listar solicitudes 
 export const listarSolicitudes = async (req, res) => {
@@ -100,3 +107,5 @@ export const iniciarPago = async(req,res)=>{
     res.status(500).json({error:'ERROR al iniciar pago'})
   }
 }
+
+

@@ -8,9 +8,15 @@ datasource db {
 
 model Solicitud {
   id             Int      @id @default(autoincrement())
+  nombre         String
+  apellido       String
+  cuil           String
+  telefono       String
   mailCliente    String
   patente        String
+  marcaModelo    String
   tipoVehiculo   String
+  tipoInforme    String
   estado         String   @default("pendiente")
   pagoId         String?
   pagoEstado     String   @default("pendiente")
