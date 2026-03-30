@@ -1,7 +1,7 @@
 export const login = async (req, res) => {
   try {
     const { password } = req.body
-
+    console.log(password,"passwor______________________________")
     if (password !== process.env.ADMIN_PASSWORD) {
       return res.status(401).json({ error: 'Contraseña incorrecta' })
     }
