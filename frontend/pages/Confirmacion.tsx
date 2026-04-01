@@ -7,7 +7,7 @@ const Confirmacion = () => {
   const config = {
     aprobado: {
       icon: "✓",
-      iconBg: "bg-emerald-600",
+      iconBg: "bg-emerald-500",
       alertClass: "bg-emerald-50 border-emerald-200 text-emerald-800",
       alertIcon: "✅",
       title: "¡Pago aprobado!",
@@ -16,7 +16,7 @@ const Confirmacion = () => {
     },
     rechazado: {
       icon: "✕",
-      iconBg: "bg-red-600",
+      iconBg: "bg-red-500",
       alertClass: "bg-red-50 border-red-200 text-red-800",
       alertIcon: "❌",
       title: "Pago rechazado",
@@ -38,15 +38,19 @@ const Confirmacion = () => {
   const { icon, iconBg, alertClass, alertIcon, title, message } = config[key];
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gradient-to-br from-blue-50 via-slate-100 to-green-50">
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-lg w-full max-w-[420px] overflow-hidden">
-        <div className="bg-gradient-to-br from-blue-600 to-blue-700 px-8 py-8 text-center">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-[#F8FAFC]">
+      <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-lg w-full max-w-[420px] overflow-hidden">
+        <div className="bg-[#1E3A5F] px-8 py-10 text-center relative overflow-hidden">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#3B82F6]/20 blur-2xl pointer-events-none" />
           <div
-            className={`w-[52px] h-[52px] ${iconBg} rounded-full flex items-center justify-center mx-auto mb-4 text-[1.3rem] font-bold text-white`}
+            className={`relative w-14 h-14 ${iconBg} rounded-2xl flex items-center justify-center mx-auto mb-5 text-xl font-bold text-white shadow-md`}
           >
             {icon}
           </div>
           <h1 className="text-white text-[1.4rem] font-bold">{title}</h1>
+          <p className="text-[#93C5FD] text-[11px] font-semibold tracking-[0.12em] uppercase mt-2">
+            Cadenas Gestoria Integral
+          </p>
         </div>
 
         <div className="p-8">
@@ -59,7 +63,7 @@ const Confirmacion = () => {
 
           <a
             href="/"
-            className="mt-5 w-full flex items-center justify-center px-5 py-2.5 border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800 rounded-md transition-all text-[0.9375rem] font-medium"
+            className="mt-4 w-full flex items-center justify-center px-5 py-2.5 border border-[#E2E8F0] text-[#3B82F6] hover:bg-[#EFF6FF] hover:border-[#BFDBFE] rounded-xl transition-all text-sm font-medium"
           >
             ← Volver al inicio
           </a>

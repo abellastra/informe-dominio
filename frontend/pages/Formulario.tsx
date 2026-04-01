@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 
 const inputClass =
-  "w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-md text-sm text-slate-900 bg-white outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-100 placeholder:text-slate-400 appearance-none";
+  "w-full px-3.5 py-2.5 border-[1.5px] border-[#E8E0DC] rounded-xl text-sm text-[#1C1412] bg-white outline-none transition focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10 placeholder:text-[#B8A8A4] appearance-none";
 
 interface Datos {
   nombre: string;
@@ -18,25 +18,24 @@ interface Datos {
 }
 
 const Formulario = () => {
-
-const [searchParams] = useSearchParams();
-const tipoInicial = searchParams.get("tipo") || "";
+  const [searchParams] = useSearchParams();
+  const tipoInicial = searchParams.get("tipo") || "";
   const [paso, setPaso] = useState(1);
-const [datos, setDatos] = useState<Datos>({
-  nombre: "",
-  apellido: "",
-  cuil: "",
-  telefono: "",
-  mailCliente: "",
-  patente: "",
-  marcaModelo: "",
-  tipoVehiculo: "",
-  tipoInforme: tipoInicial,  
-});
+  const [datos, setDatos] = useState<Datos>({
+    nombre: "",
+    apellido: "",
+    cuil: "",
+    telefono: "",
+    mailCliente: "",
+    patente: "",
+    marcaModelo: "",
+    tipoVehiculo: "",
+    tipoInforme: tipoInicial,
+  });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setDatos({ ...datos, [e.target.name]: e.target.value });
   };
@@ -59,43 +58,42 @@ const [datos, setDatos] = useState<Datos>({
   const pasos = ["Tus datos", "El vehículo", "Confirmación"];
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50">
-      <div className="bg-white border border-gray-200 rounded-2xl shadow-lg w-full max-w-[500px] overflow-hidden">
-
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#F7F5F3]">
+      <div className="bg-white border border-[#EDE8E4] rounded-2xl shadow-lg w-full max-w-[500px] overflow-hidden">
         {/* Header */}
-        <div className="bg-[#3D2B2B] px-8 py-6 text-center">
-          <p className="text-[#E8A598] text-xs font-medium tracking-widest uppercase mb-1">
+        <div className="bg-[#2D1414] px-8 py-7 text-center relative overflow-hidden">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#FF6B4A]/10 blur-2xl pointer-events-none" />
+          <p className="text-[#FF6B4A] text-[11px] font-semibold tracking-[0.12em] uppercase mb-1.5">
             Cadenas Gestoria Integral
           </p>
-          <h1 className="text-white text-xl font-bold">
-            Solicitar informe
-          </h1>
+          <h1 className="text-white text-xl font-bold">Solicitar informe</h1>
         </div>
 
         {/* Stepper */}
-        <div className="flex items-center px-8 py-4 border-b border-gray-100">
+        <div className="flex items-center px-8 py-4 bg-[#FAF8F7] border-b border-[#EDE8E4]">
           {pasos.map((nombre, index) => {
             const numero = index + 1;
             const activo = paso === numero;
             const completo = paso > numero;
             return (
               <div key={nombre} className="flex items-center flex-1">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                   <div
                     className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all
-                      ${completo ? "bg-green-500 text-white" :
-                        activo ? "bg-[#3D2B2B] text-white" :
-                        "bg-gray-100 text-gray-400"}`}
+                      ${completo ? "bg-emerald-500 text-white" : activo ? "bg-[#FF6B4A] text-white" : "bg-[#EDE8E4] text-[#9A7A75]"}`}
                   >
                     {completo ? "✓" : numero}
                   </div>
-                  <span className={`text-xs font-medium hidden sm:block
-                    ${activo ? "text-gray-800" : "text-gray-400"}`}>
+                  <span
+                    className={`text-xs font-medium hidden sm:block transition-colors ${activo ? "text-[#1C1412]" : "text-[#9A7A75]"}`}
+                  >
                     {nombre}
                   </span>
                 </div>
                 {index < pasos.length - 1 && (
-                  <div className={`flex-1 h-px mx-3 ${completo ? "bg-green-400" : "bg-gray-200"}`} />
+                  <div
+                    className={`flex-1 h-px mx-3 transition-colors ${completo ? "bg-emerald-300" : "bg-[#EDE8E4]"}`}
+                  />
                 )}
               </div>
             );
@@ -104,13 +102,14 @@ const [datos, setDatos] = useState<Datos>({
 
         {/* Contenido */}
         <div className="p-8">
-
-          {/* Paso 1 — Datos personales */}
+          {/* Paso 1 */}
           {paso === 1 && (
             <div className="flex flex-col gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-slate-800">Nombre</label>
+                  <label className="text-sm font-medium text-[#2D1414]">
+                    Nombre
+                  </label>
                   <input
                     type="text"
                     name="nombre"
@@ -121,7 +120,9 @@ const [datos, setDatos] = useState<Datos>({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-slate-800">Apellido</label>
+                  <label className="text-sm font-medium text-[#2D1414]">
+                    Apellido
+                  </label>
                   <input
                     type="text"
                     name="apellido"
@@ -134,7 +135,9 @@ const [datos, setDatos] = useState<Datos>({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-slate-800">CUIL/CUIT</label>
+                <label className="text-sm font-medium text-[#2D1414]">
+                  CUIL/CUIT
+                </label>
                 <input
                   type="text"
                   name="cuil"
@@ -146,7 +149,9 @@ const [datos, setDatos] = useState<Datos>({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-slate-800">Teléfono celular</label>
+                <label className="text-sm font-medium text-[#2D1414]">
+                  Teléfono celular
+                </label>
                 <input
                   type="text"
                   name="telefono"
@@ -158,7 +163,9 @@ const [datos, setDatos] = useState<Datos>({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-slate-800">Correo electrónico</label>
+                <label className="text-sm font-medium text-[#2D1414]">
+                  Correo electrónico
+                </label>
                 <input
                   type="email"
                   name="mailCliente"
@@ -171,19 +178,27 @@ const [datos, setDatos] = useState<Datos>({
 
               <button
                 onClick={() => setPaso(2)}
-                disabled={!datos.nombre || !datos.apellido || !datos.cuil || !datos.telefono || !datos.mailCliente}
-                className="w-full py-3 bg-[#3D2B2B] hover:bg-[#4e3535] disabled:bg-gray-200 disabled:text-gray-400 text-white font-semibold rounded-md transition-all mt-2"
+                disabled={
+                  !datos.nombre ||
+                  !datos.apellido ||
+                  !datos.cuil ||
+                  !datos.telefono ||
+                  !datos.mailCliente
+                }
+                className="w-full py-3 bg-[#2D1414] hover:bg-[#3D1E1E] disabled:bg-[#EDE8E4] disabled:text-[#B8A8A4] text-white font-semibold rounded-xl transition-all mt-2 cursor-pointer disabled:cursor-not-allowed"
               >
                 Continuar →
               </button>
             </div>
           )}
 
-          {/* Paso 2 — Datos del vehículo */}
+          {/* Paso 2 */}
           {paso === 2 && (
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-slate-800">Patente</label>
+                <label className="text-sm font-medium text-[#2D1414]">
+                  Patente
+                </label>
                 <input
                   type="text"
                   name="patente"
@@ -195,7 +210,9 @@ const [datos, setDatos] = useState<Datos>({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-slate-800">Marca y modelo</label>
+                <label className="text-sm font-medium text-[#2D1414]">
+                  Marca y modelo
+                </label>
                 <input
                   type="text"
                   name="marcaModelo"
@@ -207,7 +224,9 @@ const [datos, setDatos] = useState<Datos>({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-slate-800">Tipo de vehículo</label>
+                <label className="text-sm font-medium text-[#2D1414]">
+                  Tipo de vehículo
+                </label>
                 <select
                   name="tipoVehiculo"
                   value={datos.tipoVehiculo}
@@ -223,7 +242,9 @@ const [datos, setDatos] = useState<Datos>({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-slate-800">Tipo de informe</label>
+                <label className="text-sm font-medium text-[#2D1414]">
+                  Tipo de informe
+                </label>
                 <select
                   name="tipoInforme"
                   value={datos.tipoInforme}
@@ -241,14 +262,19 @@ const [datos, setDatos] = useState<Datos>({
               <div className="flex gap-3 mt-2">
                 <button
                   onClick={() => setPaso(1)}
-                  className="flex-1 py-3 border border-gray-200 text-gray-600 font-medium rounded-md hover:bg-gray-50 transition-all"
+                  className="flex-1 py-3 border border-[#EDE8E4] text-[#D64040] font-medium rounded-xl hover:bg-[#FFF5F3] hover:border-[#FF8066] transition-all cursor-pointer"
                 >
                   ← Volver
                 </button>
                 <button
                   onClick={() => setPaso(3)}
-                  disabled={!datos.patente || !datos.marcaModelo || !datos.tipoVehiculo || !datos.tipoInforme}
-                  className="flex-1 py-3 bg-[#3D2B2B] hover:bg-[#4e3535] disabled:bg-gray-200 disabled:text-gray-400 text-white font-semibold rounded-md transition-all"
+                  disabled={
+                    !datos.patente ||
+                    !datos.marcaModelo ||
+                    !datos.tipoVehiculo ||
+                    !datos.tipoInforme
+                  }
+                  className="flex-1 py-3 bg-[#2D1414] hover:bg-[#3D1E1E] disabled:bg-[#EDE8E4] disabled:text-[#B8A8A4] text-white font-semibold rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed"
                 >
                   Continuar →
                 </button>
@@ -256,61 +282,64 @@ const [datos, setDatos] = useState<Datos>({
             </div>
           )}
 
-          {/* Paso 3 — Confirmación */}
+          {/* Paso 3 */}
           {paso === 3 && (
             <div className="flex flex-col gap-4">
-              <p className="text-sm text-gray-500 mb-2">Revisá tus datos antes de pagar</p>
+              <p className="text-sm text-[#9A7A75]">
+                Revisá tus datos antes de pagar
+              </p>
 
-              <div className="bg-gray-50 rounded-xl p-4 flex flex-col gap-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Nombre</span>
-                  <span className="font-medium text-gray-800">{datos.nombre} {datos.apellido}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">CUIL</span>
-                  <span className="font-medium text-gray-800">{datos.cuil}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Teléfono</span>
-                  <span className="font-medium text-gray-800">{datos.telefono}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Mail</span>
-                  <span className="font-medium text-gray-800">{datos.mailCliente}</span>
-                </div>
-                <hr className="border-gray-200" />
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Patente</span>
-                  <span className="font-bold text-gray-800 tracking-wider">{datos.patente}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Vehículo</span>
-                  <span className="font-medium text-gray-800">{datos.marcaModelo}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Tipo de informe</span>
-                  <span className="font-medium text-gray-800">{datos.tipoInforme}</span>
-                </div>
+              <div className="bg-[#FAF8F7] border border-[#EDE8E4] rounded-xl p-4 flex flex-col gap-3 text-sm">
+                {[
+                  {
+                    label: "Nombre",
+                    value: `${datos.nombre} ${datos.apellido}`,
+                  },
+                  { label: "CUIL", value: datos.cuil },
+                  { label: "Teléfono", value: datos.telefono },
+                  { label: "Mail", value: datos.mailCliente },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between">
+                    <span className="text-[#9A7A75]">{label}</span>
+                    <span className="font-medium text-[#1C1412]">{value}</span>
+                  </div>
+                ))}
+                <hr className="border-[#EDE8E4]" />
+                {[
+                  { label: "Patente", value: datos.patente, bold: true },
+                  { label: "Vehículo", value: datos.marcaModelo },
+                  { label: "Tipo de informe", value: datos.tipoInforme },
+                ].map(({ label, value, bold }) => (
+                  <div key={label} className="flex justify-between">
+                    <span className="text-[#9A7A75]">{label}</span>
+                    <span
+                      className={`text-[#1C1412] ${bold ? "font-bold tracking-wider" : "font-medium"}`}
+                    >
+                      {value}
+                    </span>
+                  </div>
+                ))}
               </div>
 
-              {/* Términos */}
-              <p className="text-xs text-gray-400 text-center">
+              <p className="text-xs text-[#B8A8A4] text-center">
                 Al continuar aceptás los{" "}
-                <a href="/terminos" className="text-[#993556] underline">términos y condiciones</a>
-                {" "}del servicio
+                <a href="/terminos" className="text-[#FF6B4A] underline">
+                  términos y condiciones
+                </a>{" "}
+                del servicio
               </p>
 
               <div className="flex gap-3">
                 <button
                   onClick={() => setPaso(2)}
-                  className="flex-1 py-3 border border-gray-200 text-gray-600 font-medium rounded-md hover:bg-gray-50 transition-all"
+                  className="flex-1 py-3 border border-[#EDE8E4] text-[#D64040] font-medium rounded-xl hover:bg-[#FFF5F3] hover:border-[#FF8066] transition-all cursor-pointer"
                 >
                   ← Volver
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 py-3 bg-[#E8A598] hover:bg-[#d4917f] disabled:bg-gray-200 text-[#3D2B2B] font-semibold rounded-md transition-all"
+                  className="flex-1 py-3 bg-[#FF6B4A] hover:bg-[#E85535] disabled:bg-[#EDE8E4] disabled:text-[#B8A8A4] text-white font-semibold rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed"
                 >
                   {loading ? "Procesando..." : "Ir a pagar →"}
                 </button>
