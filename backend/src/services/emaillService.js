@@ -36,6 +36,8 @@ export const enviarAvisoGestora = async (solicitud)=>{
 }
 
 export const enviarInformeCliente = async (solicitud, urlInforme) => {
+  const urlDescarga = urlInforme.replace('/upload/', '/upload/fl_attachment/')
+  
   await resend.emails.send({
     from: 'onboarding@resend.dev',
     to: solicitud.mailCliente,
@@ -44,7 +46,7 @@ export const enviarInformeCliente = async (solicitud, urlInforme) => {
       <h2>¡Tu informe está listo!</h2>
       <p><strong>Patente:</strong> ${solicitud.patente}</p>
       <p>Podés descargar tu informe desde el siguiente link:</p>
-      <a href="${urlInforme}">Descargar informe</a>
+      <a href="${urlDescarga}">Descargar informe</a>
     `
   })
 }

@@ -40,6 +40,8 @@ const DetalleSolicitud = () => {
   const navigate = useNavigate();
   const [solicitud, setSolicitud] = useState<Solicitud | null>(null);
   const [estado, setEstado] = useState("");
+  const [subiendo, setSubiendo] = useState(false)
+const [archivoSeleccionado, setArchivoSeleccionado] = useState<File | null>(null)
 
   useEffect(() => {
     const fetchSolicitud = async () => {
@@ -68,6 +70,45 @@ const DetalleSolicitud = () => {
       alert("Error al actualizar");
     }
   };
+
+  const subirInforme =async()=>{
+    if(!archivoSeleccionado)return
+    setSubiendo(true)
+
+    try {
+      const {data:firmaData}= await axios.get('/api/admin/firma-cloudinary', {
+      withCredentials: true
+    })
+     
+    const formData = await new FormData()
+    formData.append('file', archivoSeleccionado)
+    formData.append('api_key', firmaData.apiKey)
+    formData.append('timestamp', firmaData.timestamp)
+    formData.append('signature', firmaData.firma)
+      formData.append('folder', firmaData.folder)
+      
+    const cloudinaryRes = await axios.post(
+  `https://api.cloudinary.com/v1_1/${firmaData.cloudName}/image/upload`,
+  formData
+)
+        const urlInforme = cloudinaryRes.data.secure_url
+
+          const { data } = await axios.post(
+      `/api/solicitudes/${id}/informe`,
+      { urlInforme },
+      { withCredentials: true }
+    )
+
+    setSolicitud(data)
+    setEstado(data.estado)
+    alert('Informe subido y mail enviado al cliente!')
+    } catch (error) {
+    console.log(error)
+    alert('Error al subir el informe')
+  } finally {
+    setSubiendo(false)
+  }
+  }
 
   if (!solicitud) {
     return (
@@ -194,6 +235,53 @@ const DetalleSolicitud = () => {
             </div>
           </div>
         </div>
+        
+        {/* Subir informe */}
+<div className="bg-white border border-slate-200 rounded-2xl shadow overflow-hidden mt-6">
+  <div className="px-8 py-5 border-b border-slate-200 bg-slate-50">
+    <p className="text-[0.8125rem] font-semibold text-slate-500 uppercase tracking-wide">
+      Subir informe PDF
+    </p>
+  </div>
+  <div className="p-8">
+    {solicitud.archivoInforme ? (
+      <div className="flex items-center gap-3">
+        <span className="text-sm text-emerald-700 font-medium">
+          ✓ Informe ya subido
+        </span>
+         <a
+          href={solicitud.archivoInforme}
+          target="_blank"
+          rel="noreferrer"
+          className="text-sm text-blue-600 underline"
+       >
+          Ver informe
+        </a>
+      </div>
+    ) : (
+      <div className="flex gap-3 items-end flex-wrap">
+        <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
+          <label className="text-sm font-medium text-slate-900">
+            Seleccioná el PDF
+          </label>
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => setArchivoSeleccionado(e.target.files?.[0] || null)}
+            className="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-md text-sm text-slate-900 bg-white outline-none cursor-pointer"
+          />
+        </div>
+        <button
+          onClick={subirInforme}
+          disabled={!archivoSeleccionado || subiendo}
+          className="inline-flex items-center justify-center px-5 py-2.5 bg-[#3D2B2B] hover:bg-[#4e3535] disabled:bg-gray-200 disabled:text-gray-400 text-white font-medium rounded-md shadow-sm transition-all cursor-pointer border-none text-[0.9375rem] shrink-0"
+        >
+          {subiendo ? 'Subiendo...' : 'Subir informe →'}
+        </button>
+      </div>
+    )}
+  </div>
+</div>
       </div>
     </div>
   );

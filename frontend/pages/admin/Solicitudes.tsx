@@ -69,10 +69,21 @@ const Solicitudes = () => {
     };
     fetchSolicitudes();
   }, []);
+  const handleLogout = async () => {
+  await axios.post("/api/admin/logout", {}, { withCredentials: true })
+  navigate("/admin")
+}
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100">
+  
       <nav className="bg-white border-b border-slate-200 px-8 h-[60px] flex items-center shadow-sm sticky top-0 z-10">
+          <button
+    onClick={handleLogout}
+    className="text-sm text-gray-500 hover:text-gray-800 transition-colors"
+  >
+    Cerrar sesión
+  </button>
         <div className="flex items-center gap-2.5 font-bold text-slate-900">
           <span className="bg-blue-600 text-white w-[30px] h-[30px] rounded-md flex items-center justify-center text-[0.85rem] font-bold">
             ID

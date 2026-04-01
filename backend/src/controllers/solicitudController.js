@@ -1,4 +1,5 @@
 import prisma from "../db.js";
+import { enviarInformeCliente } from "../services/emaillService.js";
 import { crearPreferencia } from "../services/mercadopagoService.js";
 
 export const crearSolicitud = async (req, res) => {
@@ -108,4 +109,30 @@ export const iniciarPago = async(req,res)=>{
   }
 }
 
+//guardar informe dominio 
 
+export const guardarInforme= async (req, res)=>{
+  try {
+    
+    const {id}= req.params
+    const {urlInforme}=req.body
+
+
+    if (!urlInforme) {
+      return res.status(400).json({ error: 'No se recibió la URL del informe' })
+    }
+
+    const solicitud = await prisma.solicitud.update({
+      where:{id:Number(id)},
+      data:{
+        archivoInforme:urlInforme,
+        estado:'listo'
+      }
+    })
+    await enviarInformeCliente(solicitud, urlInforme)
+
+    res.json(solicitud)
+  } catch (error) {
+    console.error('error:',error)
+    res.status(500).json({error:'ERROR al guardar el informe '})  }
+}

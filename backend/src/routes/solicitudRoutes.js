@@ -5,6 +5,8 @@ import {
   iniciarPago,
   listarSolicitudes,
   obtenerSolicitudes,
+  guardarInforme
+
 } from "../controllers/solicitudController.js";
 import { recibirWebhook } from "../controllers/webhookController.js";
 import { verificarAdmin } from "../middlewares/authMiddleware.js";
@@ -24,4 +26,6 @@ router.get("/solicitudes",verificarAdmin ,listarSolicitudes);
 router.get('/solicitudes/:id',verificarAdmin,obtenerSolicitudes)
 
 router.patch('/solicitudes/:id',verificarAdmin, actualizarEstado)
+
+router.post('/solicitudes/:id/informe', verificarAdmin, guardarInforme)
 export default router;
