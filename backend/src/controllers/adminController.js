@@ -10,7 +10,8 @@ export const login = async (req, res) => {
 
     res.cookie("adminToken", "admin-autenticado", {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none",
+      secure:true,  
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
     });
 
@@ -21,8 +22,10 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("adminToken")
-  res.json({ ok: true })
+res.clearCookie("adminToken", {
+  sameSite: "none",
+  secure: true,
+});  res.json({ ok: true })
 }
 
 
