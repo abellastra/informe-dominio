@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosInstance from "../../src/axiosInstance";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -30,7 +31,7 @@ const selectClass =
 const Topbar = ({ onBack }: { onBack?: () => void }) => {
   const navigate = useNavigate();
   const handleLogout = async () => {
-    await axios.post("/api/admin/logout", {}, { withCredentials: true });
+    await axiosInstance.post("/api/admin/logout");
     navigate("/admin");
   };
 
@@ -126,9 +127,7 @@ const DetalleSolicitud = () => {
   useEffect(() => {
     const fetchSolicitud = async () => {
       try {
-        const response = await axios.get(`/api/solicitudes/${id}`, {
-          withCredentials: true,
-        });
+        const response = await axiosInstance.get(`/api/solicitudes/${id}`);
         setSolicitud(response.data);
         setEstado(response.data.estado);
       } catch {
@@ -140,11 +139,7 @@ const DetalleSolicitud = () => {
 
   const actualizarEstado = async () => {
     try {
-      await axios.patch(
-        `/api/solicitudes/${id}`,
-        { estado },
-        { withCredentials: true },
-      );
+      await axiosInstance.patch(`/api/solicitudes/${id}`, { estado });
       alert("Estado actualizado!");
     } catch {
       alert("Error al actualizar");
@@ -155,9 +150,8 @@ const DetalleSolicitud = () => {
     if (!archivoSeleccionado) return;
     setSubiendo(true);
     try {
-      const { data: firmaData } = await axios.get(
+      const { data: firmaData } = await axiosInstance.get(
         "/api/admin/firma-cloudinary",
-        { withCredentials: true },
       );
       const formData = new FormData();
       formData.append("file", archivoSeleccionado);
@@ -170,10 +164,9 @@ const DetalleSolicitud = () => {
         formData,
       );
       const urlInforme = cloudinaryRes.data.secure_url;
-      const { data } = await axios.post(
+      const { data } = await axiosInstance.post(
         `/api/solicitudes/${id}/informe`,
         { urlInforme },
-        { withCredentials: true },
       );
       setSolicitud(data);
       setEstado(data.estado);

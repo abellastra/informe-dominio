@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../src/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 interface Solicitud {
@@ -59,9 +59,7 @@ const Solicitudes = () => {
   useEffect(() => {
     const fetchSolicitudes = async () => {
       try {
-        const response = await axios.get("/api/solicitudes", {
-          withCredentials: true,
-        });
+        const response = await axiosInstance.get("/api/solicitudes");
         setSolicitudes(response.data);
       } catch {
         navigate("/admin");
@@ -71,7 +69,7 @@ const Solicitudes = () => {
   }, []);
 
   const handleLogout = async () => {
-    await axios.post("/api/admin/logout", {}, { withCredentials: true });
+    await axiosInstance.post("/api/admin/logout");
     navigate("/admin");
   };
 

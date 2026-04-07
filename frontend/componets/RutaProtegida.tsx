@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../src/axiosInstance";
 
 const RutaProtegida = ({ children }: { children: React.ReactNode }) => {
   const [verificando, setVerificando] = useState(true);
@@ -10,7 +10,7 @@ const RutaProtegida = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const verificar = async () => {
       try {
-        await axios.get("/api/admin/verificar", { withCredentials: true });
+        await axiosInstance.get("/api/admin/verificar");
         setAutorizado(true);
       } catch {
         navigate("/admin");

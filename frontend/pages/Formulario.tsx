@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../src/axiosInstance";
 import { useSearchParams } from "react-router-dom";
 
 const inputClass =
@@ -43,9 +43,11 @@ const Formulario = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("/api/solicitudes", datos);
+      const response = await axiosInstance.post("/api/solicitudes", datos);
       const solicitudId = response.data.id;
-      const pago = await axios.post(`/api/solicitudes/${solicitudId}/pagar`);
+      const pago = await axiosInstance.post(
+        `/api/solicitudes/${solicitudId}/pagar`,
+      );
       window.open(pago.data.url, "_blank");
     } catch (error) {
       console.log(error);

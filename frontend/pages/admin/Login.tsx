@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../src/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -10,11 +10,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "/api/admin/login",
-        { password },
-        { withCredentials: true },
-      );
+      await axiosInstance.post("/api/admin/login", { password });
       navigate("/admin/solicitudes");
     } catch {
       setError("Contraseña incorrecta");
