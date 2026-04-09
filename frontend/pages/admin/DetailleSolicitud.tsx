@@ -170,7 +170,13 @@ const DetalleSolicitud = () => {
       );
       setSolicitud(data);
       setEstado(data.estado);
-      alert("Informe subido y mail enviado al cliente!");
+      if (data.mailEnviado === false) {
+        alert(
+          `Informe subido pero no se pudo enviar el mail: ${data.mailError}`,
+        );
+      } else {
+        alert("Informe subido y mail enviado al cliente!");
+      }
     } catch (error) {
       console.log(error);
       alert("Error al subir el informe");
@@ -290,21 +296,38 @@ const DetalleSolicitud = () => {
           {/* Subir informe */}
           <SectionCard title="Subir informe PDF">
             {solicitud.archivoInforme ? (
-              <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
-                <span className="text-emerald-600 text-lg">✓</span>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-emerald-800">
-                    Informe ya subido
-                  </p>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+                  <span className="text-emerald-600 text-lg">✓</span>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-emerald-800">
+                      Informe ya subido
+                    </p>
+                  </div>
+                  <a
+                    href={solicitud.archivoInforme}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm text-[#3B82F6] underline font-medium hover:text-[#2563EB]"
+                  >
+                    Ver informe →
+                  </a>
                 </div>
-                <a
-                  href={solicitud.archivoInforme}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm text-[#3B82F6] underline font-medium hover:text-[#2563EB]"
+                <button
+                  onClick={async () => {
+                    try {
+                      await axiosInstance.post(
+                        `/api/solicitudes/${id}/reenviar-mail`,
+                      );
+                      alert("Mail reenviado al cliente!");
+                    } catch {
+                      alert("Error al reenviar el mail");
+                    }
+                  }}
+                  className="inline-flex items-center justify-center px-5 py-2.5 bg-[#1E3A5F] hover:bg-[#15294A] text-white font-medium rounded-xl transition-all text-sm border-none cursor-pointer"
                 >
-                  Ver informe →
-                </a>
+                  Reenviar mail al cliente
+                </button>
               </div>
             ) : (
               <div className="flex gap-3 items-end flex-wrap">

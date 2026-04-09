@@ -155,13 +155,40 @@ export const guardarInforme = async (req, res) => {
       },
     });
 
-    enviarInformeCliente(solicitud, urlInforme).catch((err) =>
-      console.error("Error enviando mail al cliente:", err),
-    );
-
-    res.json(solicitud);
+    try {
+      await enviarInformeCliente(solicitud, urlInforme);
+      res.json({ ...solicitud, mailEnviado: true });
+    } catch (err) {
+      console.error("Error enviando mail al cliente:", err);
+      res.json({
+        ...solicitud,
+        mailEnviado: false,
+        mailError:
+          "El informe se guardó pero no se pudo enviar el mail al cliente.",
+      });
+    }
   } catch (error) {
     console.error("error:", error);
     res.status(500).json({ error: "ERROR al guardar el informe " });
+  }
+};
+
+export const reenviarMail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const solicitud = await prisma.solicitud.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!solicitud)
+      return res.status(404).json({ error: "solicitud no encontrada" });
+    if (!solicitud.archivoInforme)
+      return res.status(400).json({ error: "No hay informe subido" });
+
+    await enviarInformeCliente(solicitud, solicitud.archivoInforme);
+    res.json({ ok: true });
+  } catch (error) {
+    console.error("Error reenviando mail:", error);
+    res.status(500).json({ error: "No se pudo reenviar el mail" });
   }
 };

@@ -1,16 +1,27 @@
-import nodemailer from "nodemailer";
+const sendEmail = async ({ to, subject, html }) => {
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": process.env.BREVO_API_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "Informe de Dominio", email: process.env.GMAIL_USER },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
+  });
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
+  if (!res.ok) {
+    const error = await res.text();
+    console.error("Brevo error completo:", error);
+    throw new Error(`Brevo error: ${error}`);
+  }
+};
 
 export const enviarConfirmacionCliente = async (solicitud) => {
-  await transporter.sendMail({
-    from: `"Informe de Dominio" <${process.env.GMAIL_USER}>`,
+  await sendEmail({
     to: solicitud.mailCliente,
     subject: "Recibimos tu solicitud de informe de dominio",
     html: `
@@ -24,8 +35,7 @@ export const enviarConfirmacionCliente = async (solicitud) => {
 };
 
 export const enviarAvisoGestora = async (solicitud) => {
-  await transporter.sendMail({
-    from: `"Informe de Dominio" <${process.env.GMAIL_USER}>`,
+  await sendEmail({
     to: process.env.MAIL_GESTORA,
     subject: `Nueva solicitud de informe - Patente ${solicitud.patente}`,
     html: `
@@ -40,9 +50,7 @@ export const enviarAvisoGestora = async (solicitud) => {
 
 export const enviarInformeCliente = async (solicitud, urlInforme) => {
   const urlDescarga = urlInforme.replace("/upload/", "/upload/fl_attachment/");
-
-  await transporter.sendMail({
-    from: `"Informe de Dominio" <${process.env.GMAIL_USER}>`,
+  await sendEmail({
     to: solicitud.mailCliente,
     subject: "Tu informe de dominio está listo",
     html: `
