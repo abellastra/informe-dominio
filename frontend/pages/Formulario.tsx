@@ -17,10 +17,46 @@ interface Datos {
   tipoInforme: string;
 }
 
+const erroresIniciales = {
+  nombre: "",
+  apellido: "",
+  cuil: "",
+  telefono: "",
+  mailCliente: "",
+  patente: "",
+  marcaModelo: "",
+};
+
+const validar = (campo: string, valor: string) => {
+  switch (campo) {
+    case "mailCliente":
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor) ? "" : "Email inválido";
+    case "cuil":
+      return /^\d{2}-?\d{7,8}-?\d$/.test(valor)
+        ? ""
+        : "CUIL inválido (ej: 20-12345678-9)";
+    case "telefono":
+      return /^\d{7,15}$/.test(valor.replace(/\s/g, ""))
+        ? ""
+        : "Teléfono inválido";
+    case "patente":
+      return /^[A-Za-z]{2,3}\s?\d{3}\s?[A-Za-z]{0,2}$/.test(valor.trim())
+        ? ""
+        : "Patente inválida (ej: ABC 123 o AB 123 CD)";
+    case "nombre":
+    case "apellido":
+    case "marcaModelo":
+      return valor.trim().length >= 2 ? "" : "Mínimo 2 caracteres";
+    default:
+      return "";
+  }
+};
+
 const Formulario = () => {
   const [searchParams] = useSearchParams();
   const tipoInicial = searchParams.get("tipo") || "";
   const [paso, setPaso] = useState(1);
+  const [errores, setErrores] = useState(erroresIniciales);
   const [datos, setDatos] = useState<Datos>({
     nombre: "",
     apellido: "",
@@ -37,7 +73,11 @@ const Formulario = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    setDatos({ ...datos, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setDatos({ ...datos, [name]: value });
+    if (name in errores) {
+      setErrores({ ...errores, [name]: validar(name, value) });
+    }
   };
 
   const handleSubmit = async () => {
@@ -120,6 +160,9 @@ const Formulario = () => {
                     placeholder="Juan"
                     className={inputClass}
                   />
+                  {errores.nombre && (
+                    <p className="text-xs text-red-500">{errores.nombre}</p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium text-[#0F172A]">
@@ -133,6 +176,9 @@ const Formulario = () => {
                     placeholder="García"
                     className={inputClass}
                   />
+                  {errores.apellido && (
+                    <p className="text-xs text-red-500">{errores.apellido}</p>
+                  )}
                 </div>
               </div>
 
@@ -148,6 +194,9 @@ const Formulario = () => {
                   placeholder="20-12345678-9"
                   className={inputClass}
                 />
+                {errores.cuil && (
+                  <p className="text-xs text-red-500">{errores.cuil}</p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -162,6 +211,9 @@ const Formulario = () => {
                   placeholder="351 123 4567"
                   className={inputClass}
                 />
+                {errores.telefono && (
+                  <p className="text-xs text-red-500">{errores.telefono}</p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -176,16 +228,24 @@ const Formulario = () => {
                   placeholder="tu@email.com"
                   className={inputClass}
                 />
+                {errores.mailCliente && (
+                  <p className="text-xs text-red-500">{errores.mailCliente}</p>
+                )}
               </div>
 
               <button
                 onClick={() => setPaso(2)}
                 disabled={
                   !datos.nombre ||
+                  !!errores.nombre ||
                   !datos.apellido ||
+                  !!errores.apellido ||
                   !datos.cuil ||
+                  !!errores.cuil ||
                   !datos.telefono ||
-                  !datos.mailCliente
+                  !!errores.telefono ||
+                  !datos.mailCliente ||
+                  !!errores.mailCliente
                 }
                 className="w-full py-3 bg-[#1E3A5F] hover:bg-[#15294A] disabled:bg-[#E2E8F0] disabled:text-[#94A3B8] text-white font-semibold rounded-xl transition-all mt-2 cursor-pointer disabled:cursor-not-allowed"
               >
@@ -209,6 +269,9 @@ const Formulario = () => {
                   placeholder="Ej: ABC 123 o AB 123 CD"
                   className={inputClass}
                 />
+                {errores.patente && (
+                  <p className="text-xs text-red-500">{errores.patente}</p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -223,6 +286,9 @@ const Formulario = () => {
                   placeholder="Ej: Toyota Corolla"
                   className={inputClass}
                 />
+                {errores.marcaModelo && (
+                  <p className="text-xs text-red-500">{errores.marcaModelo}</p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -272,7 +338,9 @@ const Formulario = () => {
                   onClick={() => setPaso(3)}
                   disabled={
                     !datos.patente ||
+                    !!errores.patente ||
                     !datos.marcaModelo ||
+                    !!errores.marcaModelo ||
                     !datos.tipoVehiculo ||
                     !datos.tipoInforme
                   }
