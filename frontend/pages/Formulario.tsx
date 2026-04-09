@@ -3,7 +3,7 @@ import axiosInstance from "../src/axiosInstance";
 import { useSearchParams } from "react-router-dom";
 
 const inputClass =
-  "w-full px-3.5 py-2.5 border-[1.5px] border-[#E8E0DC] rounded-xl text-sm text-[#1C1412] bg-white outline-none transition focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10 placeholder:text-[#B8A8A4] appearance-none";
+  "w-full px-3.5 py-2.5 border-[1.5px] border-[#E2E8F0] rounded-xl text-sm text-[#0F172A] bg-white outline-none transition focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/10 placeholder:text-[#94A3B8] appearance-none";
 
 interface Datos {
   nombre: string;
@@ -60,19 +60,19 @@ const Formulario = () => {
   const pasos = ["Tus datos", "El vehículo", "Confirmación"];
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#F7F5F3]">
-      <div className="bg-white border border-[#EDE8E4] rounded-2xl shadow-lg w-full max-w-[500px] overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#F8FAFC]">
+      <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-lg w-full max-w-[500px] overflow-hidden">
         {/* Header */}
-        <div className="bg-[#2D1414] px-8 py-7 text-center relative overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#FF6B4A]/10 blur-2xl pointer-events-none" />
-          <p className="text-[#FF6B4A] text-[11px] font-semibold tracking-[0.12em] uppercase mb-1.5">
+        <div className="bg-[#1E3A5F] px-8 py-7 text-center relative overflow-hidden">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#3B82F6]/20 blur-2xl pointer-events-none" />
+          <p className="text-[#93C5FD] text-[11px] font-semibold tracking-[0.12em] uppercase mb-1.5">
             Cadenas Gestoria Integral
           </p>
           <h1 className="text-white text-xl font-bold">Solicitar informe</h1>
         </div>
 
         {/* Stepper */}
-        <div className="flex items-center px-8 py-4 bg-[#FAF8F7] border-b border-[#EDE8E4]">
+        <div className="flex items-center px-8 py-4 bg-[#F8FAFC] border-b border-[#E2E8F0]">
           {pasos.map((nombre, index) => {
             const numero = index + 1;
             const activo = paso === numero;
@@ -82,19 +82,19 @@ const Formulario = () => {
                 <div className="flex items-center gap-2 shrink-0">
                   <div
                     className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all
-                      ${completo ? "bg-emerald-500 text-white" : activo ? "bg-[#FF6B4A] text-white" : "bg-[#EDE8E4] text-[#9A7A75]"}`}
+                      ${completo ? "bg-emerald-500 text-white" : activo ? "bg-[#3B82F6] text-white" : "bg-[#E2E8F0] text-[#64748B]"}`}
                   >
                     {completo ? "✓" : numero}
                   </div>
                   <span
-                    className={`text-xs font-medium hidden sm:block transition-colors ${activo ? "text-[#1C1412]" : "text-[#9A7A75]"}`}
+                    className={`text-xs font-medium hidden sm:block transition-colors ${activo ? "text-[#0F172A]" : "text-[#64748B]"}`}
                   >
                     {nombre}
                   </span>
                 </div>
                 {index < pasos.length - 1 && (
                   <div
-                    className={`flex-1 h-px mx-3 transition-colors ${completo ? "bg-emerald-300" : "bg-[#EDE8E4]"}`}
+                    className={`flex-1 h-px mx-3 transition-colors ${completo ? "bg-emerald-300" : "bg-[#E2E8F0]"}`}
                   />
                 )}
               </div>
@@ -109,7 +109,7 @@ const Formulario = () => {
             <div className="flex flex-col gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#2D1414]">
+                  <label className="text-sm font-medium text-[#0F172A]">
                     Nombre
                   </label>
                   <input
@@ -122,7 +122,7 @@ const Formulario = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#2D1414]">
+                  <label className="text-sm font-medium text-[#0F172A]">
                     Apellido
                   </label>
                   <input
@@ -137,7 +137,7 @@ const Formulario = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#2D1414]">
+                <label className="text-sm font-medium text-[#0F172A]">
                   CUIL/CUIT
                 </label>
                 <input
@@ -151,7 +151,7 @@ const Formulario = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#2D1414]">
+                <label className="text-sm font-medium text-[#0F172A]">
                   Teléfono celular
                 </label>
                 <input
@@ -165,7 +165,7 @@ const Formulario = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#2D1414]">
+                <label className="text-sm font-medium text-[#0F172A]">
                   Correo electrónico
                 </label>
                 <input
@@ -187,7 +187,7 @@ const Formulario = () => {
                   !datos.telefono ||
                   !datos.mailCliente
                 }
-                className="w-full py-3 bg-[#2D1414] hover:bg-[#3D1E1E] disabled:bg-[#EDE8E4] disabled:text-[#B8A8A4] text-white font-semibold rounded-xl transition-all mt-2 cursor-pointer disabled:cursor-not-allowed"
+                className="w-full py-3 bg-[#1E3A5F] hover:bg-[#15294A] disabled:bg-[#E2E8F0] disabled:text-[#94A3B8] text-white font-semibold rounded-xl transition-all mt-2 cursor-pointer disabled:cursor-not-allowed"
               >
                 Continuar →
               </button>
@@ -198,7 +198,7 @@ const Formulario = () => {
           {paso === 2 && (
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#2D1414]">
+                <label className="text-sm font-medium text-[#0F172A]">
                   Patente
                 </label>
                 <input
@@ -212,7 +212,7 @@ const Formulario = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#2D1414]">
+                <label className="text-sm font-medium text-[#0F172A]">
                   Marca y modelo
                 </label>
                 <input
@@ -226,7 +226,7 @@ const Formulario = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#2D1414]">
+                <label className="text-sm font-medium text-[#0F172A]">
                   Tipo de vehículo
                 </label>
                 <select
@@ -244,7 +244,7 @@ const Formulario = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#2D1414]">
+                <label className="text-sm font-medium text-[#0F172A]">
                   Tipo de informe
                 </label>
                 <select
@@ -264,7 +264,7 @@ const Formulario = () => {
               <div className="flex gap-3 mt-2">
                 <button
                   onClick={() => setPaso(1)}
-                  className="flex-1 py-3 border border-[#EDE8E4] text-[#D64040] font-medium rounded-xl hover:bg-[#FFF5F3] hover:border-[#FF8066] transition-all cursor-pointer"
+                  className="flex-1 py-3 border border-[#E2E8F0] text-[#3B82F6] font-medium rounded-xl hover:bg-[#EFF6FF] hover:border-[#BFDBFE] transition-all cursor-pointer"
                 >
                   ← Volver
                 </button>
@@ -276,7 +276,7 @@ const Formulario = () => {
                     !datos.tipoVehiculo ||
                     !datos.tipoInforme
                   }
-                  className="flex-1 py-3 bg-[#2D1414] hover:bg-[#3D1E1E] disabled:bg-[#EDE8E4] disabled:text-[#B8A8A4] text-white font-semibold rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed"
+                  className="flex-1 py-3 bg-[#1E3A5F] hover:bg-[#15294A] disabled:bg-[#E2E8F0] disabled:text-[#94A3B8] text-white font-semibold rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed"
                 >
                   Continuar →
                 </button>
@@ -287,11 +287,11 @@ const Formulario = () => {
           {/* Paso 3 */}
           {paso === 3 && (
             <div className="flex flex-col gap-4">
-              <p className="text-sm text-[#9A7A75]">
+              <p className="text-sm text-[#64748B]">
                 Revisá tus datos antes de pagar
               </p>
 
-              <div className="bg-[#FAF8F7] border border-[#EDE8E4] rounded-xl p-4 flex flex-col gap-3 text-sm">
+              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 flex flex-col gap-3 text-sm">
                 {[
                   {
                     label: "Nombre",
@@ -302,20 +302,20 @@ const Formulario = () => {
                   { label: "Mail", value: datos.mailCliente },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex justify-between">
-                    <span className="text-[#9A7A75]">{label}</span>
-                    <span className="font-medium text-[#1C1412]">{value}</span>
+                    <span className="text-[#64748B]">{label}</span>
+                    <span className="font-medium text-[#0F172A]">{value}</span>
                   </div>
                 ))}
-                <hr className="border-[#EDE8E4]" />
+                <hr className="border-[#E2E8F0]" />
                 {[
                   { label: "Patente", value: datos.patente, bold: true },
                   { label: "Vehículo", value: datos.marcaModelo },
                   { label: "Tipo de informe", value: datos.tipoInforme },
                 ].map(({ label, value, bold }) => (
                   <div key={label} className="flex justify-between">
-                    <span className="text-[#9A7A75]">{label}</span>
+                    <span className="text-[#64748B]">{label}</span>
                     <span
-                      className={`text-[#1C1412] ${bold ? "font-bold tracking-wider" : "font-medium"}`}
+                      className={`text-[#0F172A] ${bold ? "font-bold tracking-wider" : "font-medium"}`}
                     >
                       {value}
                     </span>
@@ -323,9 +323,9 @@ const Formulario = () => {
                 ))}
               </div>
 
-              <p className="text-xs text-[#B8A8A4] text-center">
+              <p className="text-xs text-[#94A3B8] text-center">
                 Al continuar aceptás los{" "}
-                <a href="/terminos" className="text-[#FF6B4A] underline">
+                <a href="/terminos" className="text-[#3B82F6] underline">
                   términos y condiciones
                 </a>{" "}
                 del servicio
@@ -334,14 +334,14 @@ const Formulario = () => {
               <div className="flex gap-3">
                 <button
                   onClick={() => setPaso(2)}
-                  className="flex-1 py-3 border border-[#EDE8E4] text-[#D64040] font-medium rounded-xl hover:bg-[#FFF5F3] hover:border-[#FF8066] transition-all cursor-pointer"
+                  className="flex-1 py-3 border border-[#E2E8F0] text-[#3B82F6] font-medium rounded-xl hover:bg-[#EFF6FF] hover:border-[#BFDBFE] transition-all cursor-pointer"
                 >
                   ← Volver
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 py-3 bg-[#FF6B4A] hover:bg-[#E85535] disabled:bg-[#EDE8E4] disabled:text-[#B8A8A4] text-white font-semibold rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed"
+                  className="flex-1 py-3 bg-[#3B82F6] hover:bg-[#2563EB] disabled:bg-[#E2E8F0] disabled:text-[#94A3B8] text-white font-semibold rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed"
                 >
                   {loading ? "Procesando..." : "Ir a pagar →"}
                 </button>

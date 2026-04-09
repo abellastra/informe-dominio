@@ -13,7 +13,7 @@ export const crearPreferencia = async (solicitud) => {
         {
           title: `Informe de dominio - ${solicitud.patente}`,
           quantity: 1,
-          unit_price: 5000,
+          unit_price: Number(process.env.PRECIO_INFORME) || 5000,
           currency_id: "ARS",
         },
       ],

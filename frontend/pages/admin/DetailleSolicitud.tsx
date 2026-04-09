@@ -26,9 +26,9 @@ const pagoLabels: Record<string, string> = {
 };
 
 const selectClass =
-  "w-full px-3.5 py-2.5 border border-[#EDE8E4] rounded-xl text-sm text-[#1C1412] bg-white outline-none transition focus:border-[#FF6B4A] focus:ring-2 focus:ring-[#FF6B4A]/10 cursor-pointer appearance-none";
+  "w-full px-3.5 py-2.5 border border-[#E2E8F0] rounded-xl text-sm text-[#0F172A] bg-white outline-none transition focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/10 cursor-pointer appearance-none";
 
-const Topbar = ({ onBack }: { onBack?: () => void }) => {
+const Topbar = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     await axiosInstance.post("/api/admin/logout");
@@ -36,9 +36,9 @@ const Topbar = ({ onBack }: { onBack?: () => void }) => {
   };
 
   return (
-    <nav className="bg-[#1E0C0C] border-b border-[#3A2020] h-[60px] px-6 flex items-center justify-between sticky top-0 z-10">
+    <nav className="bg-[#1E3A5F] border-b border-[#2A4A7F] h-[60px] px-6 flex items-center justify-between sticky top-0 z-10">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-[#FF6B4A]/15 border border-[#FF6B4A]/25 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-[#3B82F6]/15 border border-[#3B82F6]/25 flex items-center justify-center">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <rect
               x="2"
@@ -46,7 +46,7 @@ const Topbar = ({ onBack }: { onBack?: () => void }) => {
               width="12"
               height="14"
               rx="1.5"
-              stroke="#FF6B4A"
+              stroke="#93C5FD"
               strokeWidth="1.5"
             />
             <line
@@ -54,7 +54,7 @@ const Topbar = ({ onBack }: { onBack?: () => void }) => {
               y1="5"
               x2="11"
               y2="5"
-              stroke="#FF6B4A"
+              stroke="#93C5FD"
               strokeWidth="1.3"
               strokeLinecap="round"
             />
@@ -63,7 +63,7 @@ const Topbar = ({ onBack }: { onBack?: () => void }) => {
               y1="8"
               x2="11"
               y2="8"
-              stroke="#FF6B4A"
+              stroke="#93C5FD"
               strokeWidth="1.3"
               strokeLinecap="round"
             />
@@ -72,7 +72,7 @@ const Topbar = ({ onBack }: { onBack?: () => void }) => {
               y1="11"
               x2="8"
               y2="11"
-              stroke="#FF6B4A"
+              stroke="#93C5FD"
               strokeWidth="1.3"
               strokeLinecap="round"
             />
@@ -82,14 +82,14 @@ const Topbar = ({ onBack }: { onBack?: () => void }) => {
           <p className="text-white text-sm font-semibold leading-none">
             Cadenas Gestoria
           </p>
-          <p className="text-[#C07060] text-[11px] leading-none mt-0.5">
+          <p className="text-[#93C5FD] text-[11px] leading-none mt-0.5">
             Panel de gestión
           </p>
         </div>
       </div>
       <button
         onClick={handleLogout}
-        className="text-[#C07060] hover:text-[#FF9F87] text-sm transition-colors cursor-pointer"
+        className="text-[#93C5FD] hover:text-white text-sm transition-colors cursor-pointer"
       >
         Cerrar sesión
       </button>
@@ -104,9 +104,9 @@ const SectionCard = ({
   title: string;
   children: React.ReactNode;
 }) => (
-  <div className="bg-white border border-[#EDE8E4] rounded-2xl shadow-sm overflow-hidden">
-    <div className="px-6 py-4 border-b border-[#EDE8E4] bg-[#FAF8F7]">
-      <p className="text-[11px] font-semibold text-[#9A7A75] uppercase tracking-wider">
+  <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-sm overflow-hidden">
+    <div className="px-6 py-4 border-b border-[#E2E8F0] bg-[#F8FAFC]">
+      <p className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
         {title}
       </p>
     </div>
@@ -181,10 +181,10 @@ const DetalleSolicitud = () => {
 
   if (!solicitud) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F5F4F2]">
+      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
         <Topbar />
-        <div className="flex-1 flex items-center justify-center gap-3 text-[#8A7570] text-sm">
-          <div className="w-5 h-5 border-2 border-[#EDE8E4] border-t-[#FF6B4A] rounded-full animate-spin" />
+        <div className="flex-1 flex items-center justify-center gap-3 text-[#64748B] text-sm">
+          <div className="w-5 h-5 border-2 border-[#E2E8F0] border-t-[#3B82F6] rounded-full animate-spin" />
           Cargando solicitud...
         </div>
       </div>
@@ -192,22 +192,22 @@ const DetalleSolicitud = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F4F2]">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
       <Topbar />
 
       <div className="flex-1 p-6 sm:p-8 max-w-[900px] mx-auto w-full">
         {/* Page header */}
         <div className="flex items-center justify-between mb-7 gap-4">
           <div>
-            <h1 className="text-xl font-bold text-[#1C1412] tracking-tight">
+            <h1 className="text-xl font-bold text-[#0F172A] tracking-tight">
               Solicitud #{solicitud.id}
             </h1>
-            <p className="text-sm text-[#8A7570] mt-0.5">
+            <p className="text-sm text-[#64748B] mt-0.5">
               Detalle y gestión del informe
             </p>
           </div>
           <button
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-[#EDE8E4] text-[#D64040] hover:bg-[#FFF5F3] hover:border-[#FF8066] rounded-xl transition-all text-sm font-medium cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-[#E2E8F0] text-[#3B82F6] hover:bg-[#EFF6FF] hover:border-[#BFDBFE] rounded-xl transition-all text-sm font-medium cursor-pointer"
             onClick={() => navigate("/admin/solicitudes")}
           >
             ← Volver
@@ -234,22 +234,22 @@ const DetalleSolicitud = () => {
                 },
               ].map(({ label, value, mono, capitalize }) => (
                 <div key={label} className="flex flex-col gap-1">
-                  <span className="text-[11px] font-semibold text-[#9A7A75] uppercase tracking-wider">
+                  <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
                     {label}
                   </span>
                   <span
-                    className={`text-sm font-medium text-[#1C1412] ${mono ? "font-bold tracking-widest" : ""} ${capitalize ? "capitalize" : ""}`}
+                    className={`text-sm font-medium text-[#0F172A] ${mono ? "font-bold tracking-widest" : ""} ${capitalize ? "capitalize" : ""}`}
                   >
                     {value}
                   </span>
                 </div>
               ))}
               <div className="flex flex-col gap-1">
-                <span className="text-[11px] font-semibold text-[#9A7A75] uppercase tracking-wider">
+                <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
                   Pago
                 </span>
                 <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border w-fit ${pagoBadgeClass[solicitud.pagoEstado] ?? "bg-[#F5F0EE] text-[#8A7570] border-[#E0D5D0]"}`}
+                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border w-fit ${pagoBadgeClass[solicitud.pagoEstado] ?? "bg-amber-50 text-amber-700 border-amber-200"}`}
                 >
                   {pagoLabels[solicitud.pagoEstado] ?? solicitud.pagoEstado}
                 </span>
@@ -263,7 +263,7 @@ const DetalleSolicitud = () => {
               <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
                 <label
                   htmlFor="estado"
-                  className="text-sm font-medium text-[#2D1414]"
+                  className="text-sm font-medium text-[#0F172A]"
                 >
                   Estado de la solicitud
                 </label>
@@ -279,7 +279,7 @@ const DetalleSolicitud = () => {
                 </select>
               </div>
               <button
-                className="inline-flex items-center justify-center px-5 py-2.5 bg-[#2D1414] hover:bg-[#3D1E1E] active:scale-[0.98] text-white font-medium rounded-xl transition-all cursor-pointer border-none text-sm shrink-0"
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-[#1E3A5F] hover:bg-[#15294A] active:scale-[0.98] text-white font-medium rounded-xl transition-all cursor-pointer border-none text-sm shrink-0"
                 onClick={actualizarEstado}
               >
                 Guardar estado
@@ -301,7 +301,7 @@ const DetalleSolicitud = () => {
                   href={solicitud.archivoInforme}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm text-[#D64040] underline font-medium hover:text-[#FF6B4A]"
+                  className="text-sm text-[#3B82F6] underline font-medium hover:text-[#2563EB]"
                 >
                   Ver informe →
                 </a>
@@ -309,7 +309,7 @@ const DetalleSolicitud = () => {
             ) : (
               <div className="flex gap-3 items-end flex-wrap">
                 <div className="flex flex-col gap-1.5 flex-1 min-w-[180px]">
-                  <label className="text-sm font-medium text-[#2D1414]">
+                  <label className="text-sm font-medium text-[#0F172A]">
                     Seleccioná el PDF
                   </label>
                   <input
@@ -318,13 +318,13 @@ const DetalleSolicitud = () => {
                     onChange={(e) =>
                       setArchivoSeleccionado(e.target.files?.[0] || null)
                     }
-                    className="w-full px-3.5 py-2.5 border border-[#EDE8E4] rounded-xl text-sm text-[#1C1412] bg-white outline-none cursor-pointer file:mr-3 file:px-3 file:py-1 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[#FFE8E4] file:text-[#D64040]"
+                    className="w-full px-3.5 py-2.5 border border-[#E2E8F0] rounded-xl text-sm text-[#0F172A] bg-white outline-none cursor-pointer file:mr-3 file:px-3 file:py-1 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[#DBEAFE] file:text-[#1E3A5F]"
                   />
                 </div>
                 <button
                   onClick={subirInforme}
                   disabled={!archivoSeleccionado || subiendo}
-                  className="inline-flex items-center justify-center px-5 py-2.5 bg-[#FF6B4A] hover:bg-[#E85535] disabled:bg-[#EDE8E4] disabled:text-[#B8A8A4] active:scale-[0.98] text-white font-medium rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed border-none text-sm shrink-0"
+                  className="inline-flex items-center justify-center px-5 py-2.5 bg-[#3B82F6] hover:bg-[#2563EB] disabled:bg-[#E2E8F0] disabled:text-[#94A3B8] active:scale-[0.98] text-white font-medium rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed border-none text-sm shrink-0"
                 >
                   {subiendo ? "Subiendo..." : "Subir informe →"}
                 </button>

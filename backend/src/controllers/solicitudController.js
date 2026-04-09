@@ -123,7 +123,11 @@ export const iniciarPago = async (req, res) => {
       data: { pagoId: preferencia.id },
     });
 
-    res.json({ url: preferencia.sandbox_init_point });
+    const url =
+      process.env.NODE_ENV === "production"
+        ? preferencia.init_point
+        : preferencia.sandbox_init_point;
+    res.json({ url });
   } catch (error) {
     console.error("error:", error);
     res.status(500).json({ error: "ERROR al iniciar pago" });
