@@ -1,11 +1,16 @@
-export const verificarAdmin = (req, res, next) => {
-  const token = req.cookies.adminToken
-  console.log(req.cookies)
-  console.log(token,"7//////////////////////////////")
+import jwt from "jsonwebtoken";
 
-  if (!token || token !== 'admin-autenticado') {
-    return res.status(401).json({ error: 'No autorizado' })
+export const verificarAdmin = (req, res, next) => {
+  const token = req.cookies.adminToken;
+
+  if (!token) {
+    return res.status(401).json({ error: "No autorizado" });
   }
 
-  next()
-}
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    return res.status(401).json({ error: "No autorizado" });
+  }
+};
