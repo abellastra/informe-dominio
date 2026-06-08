@@ -160,7 +160,7 @@ const DetalleSolicitud = () => {
       formData.append("signature", firmaData.firma);
       formData.append("folder", firmaData.folder);
       const cloudinaryRes = await axios.post(
-        `https://api.cloudinary.com/v1_1/${firmaData.cloudName}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${firmaData.cloudName}/raw/upload`,
         formData,
       );
       const urlInforme = cloudinaryRes.data.secure_url;
