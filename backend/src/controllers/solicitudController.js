@@ -1,37 +1,39 @@
 import prisma from "../db.js";
+import { z } from "zod";
 import { enviarInformeCliente } from "../services/emaillService.js";
 import { crearPreferencia } from "../services/mercadopagoService.js";
 
+const solicitudSchema = z.object({
+  nombre: z.string().min(2, "Nombre muy corto").max(50),
+  apellido: z.string().min(2, "Apellido muy corto").max(50),
+  cuil: z.string().regex(/^\d{2}-\d{8}-\d{1}$/, "CUIL inválido. Formato: 20-12345678-9"),
+  telefono: z.string().regex(/^\+?[\d\s\-]{8,15}$/, "Teléfono inválido"),
+  mailCliente: z.string().email("Email inválido"),
+  patente: z.string().regex(/^[A-Z]{2}\d{3}[A-Z]{2}$|^[A-Z]{3}\d{3}$/, "Patente inválida"),
+  marcaModelo: z.string().min(2).max(100),
+  tipoVehiculo: z.enum(["auto", "moto", "camioneta", "camion"], {
+    message: "Tipo de vehículo inválido"
+  }),
+  tipoInforme: z.enum(["dominio", "inhibiciones", "anotaciones"], {
+    message: "Tipo de informe inválido"
+  }),
+})
+
 export const crearSolicitud = async (req, res) => {
   try {
-    const {
-      nombre,
-      apellido,
-      cuil,
-      telefono,
-      mailCliente,
-      patente,
-      marcaModelo,
-      tipoVehiculo,
-      tipoInforme,
-    } = req.body;
 
-    if (
-      !nombre ||
-      !apellido ||
-      !cuil ||
-      !telefono ||
-      !mailCliente ||
-      !patente ||
-      !marcaModelo ||
-      !tipoVehiculo ||
-      !tipoInforme
-    ) {
-      return res
-        .status(400)
-        .json({ error: "Todos los campos son obligatorios" });
+    const resultado = solicitudSchema.safeParse(req.body);
+
+    if (!resultado.success) {
+      return res.status(400).json({
+        error: "Datos inválidos",
+        detalles: resultado.error.flatten().fieldErrors
+      })
     }
 
+    const { nombre, apellido, cuil, telefono, mailCliente,
+      patente, marcaModelo, tipoVehiculo, tipoInforme } = resultado.data
+      
     const solicitud = await prisma.solicitud.create({
       data: {
         nombre,
@@ -43,8 +45,10 @@ export const crearSolicitud = async (req, res) => {
         marcaModelo,
         tipoVehiculo,
         tipoInforme,
+        estado: "pendiente",
+        pagoEstado: "pendiente",
       },
-    });
+    })
 
     res.status(201).json(solicitud);
   } catch (error) {
