@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import axiosInstance from "../../src/axiosInstance";
+import axiosInstance from "../axiosInstance";
 import { useNavigate } from "react-router-dom";
 
-const LOCKOUT_SECONDS = 15 * 60;
+const LOCKOUT_SECONDS = 60;
 
 const formatTime = (s: number) => {
   const m = Math.floor(s / 60)
@@ -25,8 +25,9 @@ const Login = () => {
     };
   }, []);
 
-  const startCountdown = () => {
-    setCountdown(LOCKOUT_SECONDS);
+  const startCountdown = (seconds: number) => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    setCountdown(seconds);
     timerRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -43,10 +44,14 @@ const Login = () => {
     e.preventDefault();
     try {
       await axiosInstance.post("/api/admin/login", { password });
-      navigate("/admin/solicitudes");
+      navigate("/solicitudes");
     } catch (err: any) {
       if (err?.response?.status === 429) {
-        startCountdown();
+        const retryAfter = parseInt(
+          err.response.headers["retry-after"] ?? String(LOCKOUT_SECONDS),
+          10,
+        );
+        startCountdown(retryAfter);
         setError("Demasiados intentos.");
       } else {
         const msg = err?.response?.data?.error;

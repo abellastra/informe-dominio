@@ -1,4 +1,5 @@
 import prisma from "../db.js";
+import crypto from "crypto";
 
 import { MercadoPagoConfig, Payment } from "mercadopago";
 import {
@@ -10,8 +11,37 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN,
 });
 
+const verificarFirmaMP = (req) => {
+  const signatureHeader = req.headers["x-signature"];
+  const requestId = req.headers["x-request-id"];
+
+  if (!signatureHeader || !requestId) return false;
+
+  const parts = Object.fromEntries(
+    signatureHeader.split(",").map((p) => p.split("="))
+  );
+  const ts = parts["ts"];
+  const v1 = parts["v1"];
+
+  if (!ts || !v1) return false;
+
+  const dataId = req.body?.data?.id;
+  const manifest = `id:${dataId};request-id:${requestId};ts:${ts};`;
+
+  const firma = crypto
+    .createHmac("sha256", process.env.MP_WEBHOOK_SECRET)
+    .update(manifest)
+    .digest("hex");
+
+  return firma === v1;
+};
+
+
 export const recibirWebhook = async (req, res) => {
   try {
+    if (!verificarFirmaMP(req)) {
+  return res.sendStatus(401);
+}
     const { type, data } = req.body;
     if (type !== "payment") {
       return res.sendStatus(200);
