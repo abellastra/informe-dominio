@@ -6,34 +6,47 @@ import { crearPreferencia } from "../services/mercadopagoService.js";
 const solicitudSchema = z.object({
   nombre: z.string().min(2, "Nombre muy corto").max(50),
   apellido: z.string().min(2, "Apellido muy corto").max(50),
-  cuil: z.string().regex(/^\d{2}-\d{8}-\d{1}$/, "CUIL inválido. Formato: 20-12345678-9"),
-  telefono: z.string().regex(/^\+?[\d\s\-]{8,15}$/, "Teléfono inválido"),
+  cuil: z
+    .string()
+    .regex(/^\d{2}-\d{8}-\d{1}$/, "CUIL inválido. Formato: 20-12345678-9"),
+  telefono: z.string().regex(/^\+?[\d\s\-]{10,15}$/, "Teléfono inválido"),
   mailCliente: z.string().email("Email inválido"),
-  patente: z.string().regex(/^[A-Z]{2}\d{3}[A-Z]{2}$|^[A-Z]{3}\d{3}$/, "Patente inválida"),
+  patente: z
+    .string()
+    .regex(
+      /^[A-Z]{2}\d{3}[A-Z]{2}$|^[A-Z]{3}\d{3}$|^[A-Z]\d{3}[A-Z]{3}$|^\d{3}[A-Z]{3}$/,
+      "Patente inválida",
+    ),
   marcaModelo: z.string().min(2).max(100),
   tipoVehiculo: z.enum(["auto", "moto", "camioneta", "camion"], {
-    message: "Tipo de vehículo inválido"
+    message: "Tipo de vehículo inválido",
   }),
-  tipoInforme: z.enum(["dominio", "inhibiciones", "anotaciones"], {
-    message: "Tipo de informe inválido"
-  }),
-})
+  tipoInforme: z.string().default(""),
+});
 
 export const crearSolicitud = async (req, res) => {
   try {
-
     const resultado = solicitudSchema.safeParse(req.body);
 
     if (!resultado.success) {
       return res.status(400).json({
         error: "Datos inválidos",
-        detalles: resultado.error.flatten().fieldErrors
-      })
+        detalles: resultado.error.flatten((i) => i.message).fieldErrors,
+      });
     }
 
-    const { nombre, apellido, cuil, telefono, mailCliente,
-      patente, marcaModelo, tipoVehiculo, tipoInforme } = resultado.data
-      
+    const {
+      nombre,
+      apellido,
+      cuil,
+      telefono,
+      mailCliente,
+      patente,
+      marcaModelo,
+      tipoVehiculo,
+      tipoInforme,
+    } = resultado.data;
+
     const solicitud = await prisma.solicitud.create({
       data: {
         nombre,
@@ -48,7 +61,7 @@ export const crearSolicitud = async (req, res) => {
         estado: "pendiente",
         pagoEstado: "pendiente",
       },
-    })
+    });
 
     res.status(201).json(solicitud);
   } catch (error) {
