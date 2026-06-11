@@ -9,14 +9,14 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
-      expiresIn: "8h",
+      expiresIn: "24h",
     });
 
     res.cookie("adminToken", token, {
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      maxAge: 1000 * 60 * 60 * 8,
+      maxAge: 1000 * 60 * 60 * 24,
     });
 
     res.json({ ok: true });
