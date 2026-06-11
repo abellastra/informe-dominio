@@ -27,22 +27,36 @@ const erroresIniciales = {
   marcaModelo: "",
 };
 
+const formatCuil = (value: string): string => {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 10) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
+  return `${digits.slice(0, 2)}-${digits.slice(2, 10)}-${digits.slice(10)}`;
+};
+
+const formatPatente = (value: string): string =>
+  value.replace(/\s/g, "").toUpperCase().slice(0, 7);
+
 const validar = (campo: string, valor: string) => {
   switch (campo) {
     case "mailCliente":
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor) ? "" : "Email inválido";
     case "cuil":
-      return /^\d{2}-?\d{7,8}-?\d$/.test(valor)
+      if (valor.length < 13) return "";
+      return /^\d{2}-\d{8}-\d$/.test(valor)
         ? ""
         : "CUIL inválido (ej: 20-12345678-9)";
     case "telefono":
-      return /^\d{7,15}$/.test(valor.replace(/\s/g, ""))
+      return /^\d{10,15}$/.test(valor.replace(/\s/g, ""))
         ? ""
-        : "Teléfono inválido";
+        : "Teléfono inválido (10 dígitos)";
     case "patente":
-      return /^[A-Za-z]{2,3}\s?\d{3}\s?[A-Za-z]{0,2}$/.test(valor.trim())
+      if (valor.length < 6) return "";
+      return /^[A-Z]{2}\d{3}[A-Z]{2}$|^[A-Z]{3}\d{3}$|^[A-Z]\d{3}[A-Z]{3}$|^\d{3}[A-Z]{3}$/.test(
+        valor,
+      )
         ? ""
-        : "Patente inválida (ej: ABC 123 o AB 123 CD)";
+        : "Patente inválida (ej: ABC123, AB123CD o A123BCD)";
     case "nombre":
     case "apellido":
     case "marcaModelo":
@@ -73,7 +87,10 @@ const Formulario = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
+    let value = e.target.value;
+    if (name === "cuil") value = formatCuil(value);
+    if (name === "patente") value = formatPatente(value);
     setDatos({ ...datos, [name]: value });
     if (name in errores) {
       setErrores({ ...errores, [name]: validar(name, value) });
@@ -88,7 +105,7 @@ const Formulario = () => {
       const pago = await axiosInstance.post(
         `/api/solicitudes/${solicitudId}/pagar`,
       );
-      window.open(pago.data.url, "_blank");
+      window.location.href = pago.data.url;
     } catch (error) {
       console.log(error);
       alert("Hubo un error, intenta de nuevo");
@@ -266,7 +283,7 @@ const Formulario = () => {
                   name="patente"
                   value={datos.patente}
                   onChange={handleChange}
-                  placeholder="Ej: ABC 123 o AB 123 CD"
+                  placeholder="Ej: ABC123 o AB123CD"
                   className={inputClass}
                 />
                 {errores.patente && (
@@ -309,24 +326,6 @@ const Formulario = () => {
                 </select>
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#0F172A]">
-                  Tipo de informe
-                </label>
-                <select
-                  name="tipoInforme"
-                  value={datos.tipoInforme}
-                  onChange={handleChange}
-                  className={inputClass + " cursor-pointer"}
-                >
-                  <option value="">Seleccioná uno</option>
-                  <option value="dominio">Informe de dominio</option>
-                  <option value="historico">Informe histórico</option>
-                  <option value="nominal">Informe nominal</option>
-                  <option value="anotaciones">Anotaciones personales</option>
-                </select>
-              </div>
-
               <div className="flex gap-3 mt-2">
                 <button
                   onClick={() => setPaso(1)}
@@ -341,8 +340,7 @@ const Formulario = () => {
                     !!errores.patente ||
                     !datos.marcaModelo ||
                     !!errores.marcaModelo ||
-                    !datos.tipoVehiculo ||
-                    !datos.tipoInforme
+                    !datos.tipoVehiculo
                   }
                   className="flex-1 py-3 bg-[#1E3A5F] hover:bg-[#15294A] disabled:bg-[#E2E8F0] disabled:text-[#94A3B8] text-white font-semibold rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed"
                 >
@@ -378,7 +376,6 @@ const Formulario = () => {
                 {[
                   { label: "Patente", value: datos.patente, bold: true },
                   { label: "Vehículo", value: datos.marcaModelo },
-                  { label: "Tipo de informe", value: datos.tipoInforme },
                 ].map(({ label, value, bold }) => (
                   <div key={label} className="flex justify-between">
                     <span className="text-[#64748B]">{label}</span>
